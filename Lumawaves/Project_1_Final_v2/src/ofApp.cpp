@@ -100,6 +100,8 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    ofEnableAntiAliasing();
+    
     if(fade){
     ofFill();
     ofSetColor(0, 1);
@@ -197,9 +199,14 @@ void ofApp::draw(){
         ofEndShape(true);
         //////////////////////////////////////////////////////////////////////////////
 
+    ofDisableAntiAliasing();
+    
     // should the gui control hiding?
     if(!bHide){
         gui.draw();
+        ofShowCursor();
+    }else{
+        ofHideCursor();
     }
     
     
@@ -219,6 +226,14 @@ void ofApp::keyPressed(int key){
     
     if(key == 'h'){
         bHide = !bHide;
+    }
+    
+    if(key == 's'){
+        runBack = !runBack;
+    }
+    
+    if(key == 'f'){
+        fade = !fade;
     }
 }
 
