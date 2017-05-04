@@ -22,28 +22,26 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    //Vars
-    float deltaH;
-    float deltaS;
-    float rotHue;
-    float rotSat;
-    vector<ofPoint> pts;
-    bool reDo;
-    bool reDoII = false;
-    bool spaceCase;
-    ofFbo fbo;
+        //Vars
+            float deltaH;
+            float deltaS;
+            float rotHue;
+            float rotSat;
+            vector<ofPoint> pts;
+            bool reDo;
+            bool reDoII = false;
+            bool spaceCase;
+            ofFbo fbo;
     
     
     
-    //GUI Vars
-    ofxButton reBack;
-    ofxButton Initialize;
-    ofxToggle runBack;
-    ofxToggle fade;
-    ofxIntSlider lineSpace;
-    ofxFloatSlider lineWidth;
-    
-    bool bHide = false;
-    ofxPanel gui;
+        //GUI Vars
+            ofxToggle Initialize;
+            ofxToggle runBack;
+            ofxToggle fade;
+            ofxIntSlider lineSpace;
+            ofxFloatSlider lineWidth;
+            bool bHide = false;
+            ofxPanel gui;
 		
 };

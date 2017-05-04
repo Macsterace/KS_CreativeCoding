@@ -16,8 +16,7 @@ void ofApp::setup(){
     gui.setup(); // most of the time you don't need a name
     gui.add(lineWidth.setup("Line Width", 0.01f, 0.001f, 2.0f));
     gui.add(lineSpace.setup("Line Spaceing", 12, 1, 30));
-    gui.add(reBack.setup("Draw background"));
-    gui.add(Initialize.setup("Initialize"));
+    gui.add(Initialize.setup("Draw Background", false));
     gui.add(runBack.setup("Switch", false));
     gui.add(fade.setup("Fade", false));
 
@@ -36,7 +35,7 @@ void ofApp::setup(){
         p.x = (ofGetWidth()/2);
         //p.x = 10;
         p.y = i*ofGetHeight()/numPt;   // sets points along the y of the line
-        ofLog() << i << " " << p;
+        //ofLog() << i << " " << p;
         pts.push_back(p);
     }
 /////////////////////////////////////////////////////////////////////////////
@@ -76,9 +75,7 @@ void ofApp::update(){
         } //closes 4
     }//runback
     
-    if(reBack){
-       ofBackground(ofColor::black);
-    }
+    
     
 /////////////////////////////////////////////////////////////////////////////////////////////
     //resets the drawing to initialization, runs once
@@ -109,6 +106,9 @@ void ofApp::draw(){
     ofDrawRectangle(0, 0,ofGetWidth(), ofGetHeight());
     }//fade
     
+    if(Initialize){
+       ofBackground(ofColor::black);
+    }
     
     fbo.begin();
     //the fbo isnt doing anything special but it is left in for increased functionality in future iterations
