@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
 
@@ -27,12 +28,22 @@ class ofApp : public ofBaseApp{
     float rotHue;
     float rotSat;
     vector<ofPoint> pts;
-    //ofColor lineColor;
     bool reDo;
+    bool reDoII = false;
     bool spaceCase;
     ofFbo fbo;
     
     
     
+    //GUI Vars
+    ofxButton reBack;
+    ofxButton Initialize;
+    ofxToggle runBack;
+    ofxToggle fade;
+    ofxIntSlider lineSpace;
+    ofxFloatSlider lineWidth;
+    
+    bool bHide = false;
+    ofxPanel gui;
 		
 };

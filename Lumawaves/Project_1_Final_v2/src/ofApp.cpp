@@ -13,6 +13,15 @@ void ofApp::setup(){
     fbo.allocate(1440, 900);
     reDo = true;                 //have to initialize
     
+    gui.setup(); // most of the time you don't need a name
+    gui.add(lineWidth.setup("Line Width", 0.01f, 0.001f, 2.0f));
+    gui.add(lineSpace.setup("Line Spaceing", 12, 1, 30));
+    gui.add(reBack.setup("Draw background"));
+    gui.add(Initialize.setup("Initialize"));
+    gui.add(runBack.setup("Switch", false));
+    gui.add(fade.setup("Fade", false));
+
+
     
 ///////////////////////////////////////////////////////////////////////////////
     //Initialization of the Lines
@@ -38,9 +47,25 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
     
+    
+    ofSetLineWidth(lineWidth);      //as skinny as possible lines
     //every time it is run the points are initialized in slightly different spots, causing natural line movement
+    
+    if(runBack){
+        for(int i = 0; i < pts.size(); i ++){
+            pts[i].x -= ofRandom(-1.5, lineSpace);       //x growth, if lines get bunched up increase range
+            pts[i].y -= ofRandom(-3, 3);         //y growth
+            //ofLog() << i << " " << pts[i].x;
+            
+            //resets the points after they move too far off the edge
+            if(pts[i].x >= 5000){
+                reDoII = true;
+            }
+        } //closes 4
+
+    }else{
     for(int i = 0; i < pts.size(); i ++){
-        pts[i].x += ofRandom(-1.5, 12);       //x growth, if lines get bunched up increase range
+        pts[i].x += ofRandom(-1.5, lineSpace);       //x growth, if lines get bunched up increase range
         pts[i].y += ofRandom(-3, 3);         //y growth
         //ofLog() << i << " " << pts[i].x;
         
@@ -49,14 +74,26 @@ void ofApp::update(){
             reDo = true;
         }
         } //closes 4
+    }//runback
+    
+    if(reBack){
+       ofBackground(ofColor::black);
+    }
     
 /////////////////////////////////////////////////////////////////////////////////////////////
     //resets the drawing to initialization, runs once
-    if(reDo){
+    if(reDo &&  !runBack){
         for(int i = 0; i < pts.size(); i ++){
             pts[i].x = (ofGetWidth()/2);
                       }//4
         reDo = false;
+    }//reDo
+    
+    if(reDoII){
+        for(int i = 0; i < pts.size(); i ++){
+            pts[i].x = ofGetWidth();
+        }//4
+        reDoII = false;
     }//reDo
 /////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -65,6 +102,12 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    
+    if(fade){
+    ofFill();
+    ofSetColor(0, 1);
+    ofDrawRectangle(0, 0,ofGetWidth(), ofGetHeight());
+    }//fade
     
     
     fbo.begin();
@@ -154,19 +197,34 @@ void ofApp::draw(){
         ofEndShape(true);
         //////////////////////////////////////////////////////////////////////////////
 
+    // should the gui control hiding?
+    if(!bHide){
+        gui.draw();
+    }
+    
+    
+    
 } //closes draw
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     
-    if (key == ' '){
+    if (key == ' ' && !runBack ){
         reDo = true;  //reinitializes the sketch
     }//space
+    
+    if (key == ' ' && runBack){
+        reDoII = true;  //reinitializes the sketch in reverse
+    }//space
+    
+    if(key == 'h'){
+        bHide = !bHide;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+    
 }
 
 //--------------------------------------------------------------
