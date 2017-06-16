@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "ofxSyphon.h"
 
 class ofApp : public ofBaseApp{
 
@@ -32,16 +33,31 @@ class ofApp : public ofBaseApp{
             bool reDoII = false;
             bool spaceCase;
             ofFbo fbo;
-    
+            unsigned long swicheR;
+            float everyTen;
+            bool togL;
     
     
         //GUI Vars
             ofxToggle Initialize;
             ofxToggle runBack;
             ofxToggle fade;
+            ofxToggle Auto;
             ofxIntSlider lineSpace;
+            //ofxFloatSlider wideR;
             ofxFloatSlider lineWidth;
+            ofxIntSlider fadeR;
+            ofxFloatSlider switchSpead;
             bool bHide = false;
             ofxPanel gui;
+    
+    //syphon vars
+    ofTexture tex;
+    ofxSyphonServer mainOutputSyphonServer;
+    ofxSyphonServer individualTextureSyphonServer;
+   
+
+
+    //ofxSyphonClient mClient;
 		
 };

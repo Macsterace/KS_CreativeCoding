@@ -13,13 +13,27 @@ void ofApp::setup(){
     fbo.allocate(1440, 900);
     reDo = true;                 //have to initialize
     
+    //gui setup
     gui.setup(); // most of the time you don't need a name
-    gui.add(lineWidth.setup("Line Width", 0.01f, 0.001f, 2.0f));
-    gui.add(lineSpace.setup("Line Spaceing", 12, 1, 30));
-    gui.add(Initialize.setup("Draw Background", false));
+    
+    gui.add(Auto.setup("Auto", true));
     gui.add(runBack.setup("Switch", false));
+    gui.add(Initialize.setup("Background", false));
     gui.add(fade.setup("Fade", false));
+    gui.add(fadeR.setup("Fade Amount", 1, 0, 20));
+    gui.add(switchSpead.setup("Switch Speed", 2.0f, 0.01f,  12.0f));
+    gui.add(lineSpace.setup("Line Spacing", 12, 1, 30));
+    gui.add(lineWidth.setup("Line Width", 0.01f, 0.001f, 10.0f));
+    //gui.add(wideR.setup("Really Wide Lines", 1.0f, 1.0f, 1000.0f));
 
+    //syphon setup
+    //mainOutputSyphonServer.setName("Lumawaves Output");
+    //individualTextureSyphonServer.setName("LumaTexture Output");
+    //tex.allocate(1440, 900, GL_RGBA);
+    //mClient.setup();
+    //using Syphon app Simple Server, found at http://syphon.v002.info/
+    //mClient.set("","Simple Server");
+    //tex.allocate(200, 100, GL_RGBA);
 
     
 ///////////////////////////////////////////////////////////////////////////////
@@ -39,12 +53,39 @@ void ofApp::setup(){
         pts.push_back(p);
     }
 /////////////////////////////////////////////////////////////////////////////
-    
-    
+    runBack = true;
+    fade = true;
 } //closes setup
+
+
+
+
+
+
+
+
+
+
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    
+    if(Auto){
+    swicheR = ofGetElapsedTimef();
+    //ofLog() <<  swicheR << "Time" << isnumber;
+    if(swicheR - everyTen > switchSpead){
+        if(togL){
+           runBack = true;
+            
+           togL = false;
+        }else{
+            runBack = false;
+            togL = true;
+            
+        }
+     everyTen = swicheR;
+    }
+    }//Auto
     
     
     ofSetLineWidth(lineWidth);      //as skinny as possible lines
@@ -57,9 +98,9 @@ void ofApp::update(){
             //ofLog() << i << " " << pts[i].x;
             
             //resets the points after they move too far off the edge
-            if(pts[i].x >= 5000){
-                reDoII = true;
-            }
+//            if(pts[i].x >= 5000){
+//                reDoII = true;
+//            }
         } //closes 4
 
     }else{
@@ -69,9 +110,9 @@ void ofApp::update(){
         //ofLog() << i << " " << pts[i].x;
         
         //resets the points after they move too far off the edge
-        if(pts[i].x >= 5000){
+       if(pts[i].x >= 5000){
             reDo = true;
-        }
+       }
         } //closes 4
     }//runback
     
@@ -97,24 +138,40 @@ void ofApp::update(){
     
 } //closes update
 
+
+
+
+
+
+
+
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    
+    
     ofEnableAntiAliasing();
+    ofEnableSmoothing();
     
     if(fade){
     ofFill();
-    ofSetColor(0, 1);
+    ofSetColor(0, fadeR);
     ofDrawRectangle(0, 0,ofGetWidth(), ofGetHeight());
-    }//fade
+    
+    }else{
+        ofNoFill();
+        
+    }//closes fade
     
     if(Initialize){
        ofBackground(ofColor::black);
+    }else{
+        ofSetBackgroundAuto(false);
     }
     
-    fbo.begin();
+    //fbo.begin();
     //the fbo isnt doing anything special but it is left in for increased functionality in future iterations
-    ofBackground(ofColor::black);
+    //ofBackground(ofColor::black);
     
     //creates the line color based on number of frames passed
     float f = ofGetFrameNum();  // f variable is recreated with every frame to create more dynamic changed in color
@@ -154,13 +211,13 @@ void ofApp::draw(){
    ofEndShape(true);
 //////////////////////////////////////////////////////////////////////////////
     
-    fbo.end();
+    //fbo.end();
     
-    if(spaceCase){
-        fbo.draw(0, 0);
-        
-    }
-    //else {
+//    if(spaceCase){
+//        fbo.draw(0, 0);
+//        
+//    }
+//    else {
         float f1 = ofGetFrameNum();  // f variable is recreated with every frame to create more dynamic changed in color
         
         ofColor lineColor1 = ofColor::fromHsb(0, 0, 255);
@@ -173,7 +230,7 @@ void ofApp::draw(){
         // ofLog() << i << " " << p;
         
         lineColor1.setHsb(rotHue, rotSat, 255);
-        ofSetColor(lineColor);
+        ofSetColor(lineColor1);
         ofNoFill();  //dont fill in the shapes
 
         
@@ -198,8 +255,19 @@ void ofApp::draw(){
         ofVertex(ofGetWidth() - pts[pts.size()-1].x, ofGetHeight());  //end point
         ofEndShape(true);
         //////////////////////////////////////////////////////////////////////////////
-
+//    }//else
+    
+   
+    
+    ofDisableSmoothing();
     ofDisableAntiAliasing();
+
+    
+//    ofFill();
+//    ofSetColor(255, 0, 0);
+//    ofDrawCircle(500, 500, 100);
+    //mainOutputSyphonServer.publishScreen();
+    //individualTextureSyphonServer.publishTexture(&fbo.getTexture());
     
     // should the gui control hiding?
     if(!bHide){
@@ -212,6 +280,15 @@ void ofApp::draw(){
     
     
 } //closes draw
+
+
+
+
+
+
+
+
+
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){

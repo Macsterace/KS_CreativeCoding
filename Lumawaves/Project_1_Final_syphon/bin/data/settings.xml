@@ -3,5 +3,8 @@
 	<Line_Spaceing>12</Line_Spaceing>
 	<Draw_Background>0</Draw_Background>
 	<Switch>0</Switch>
-	<Fade>0</Fade>
+	<Fade>1</Fade>
+<group/>
+	<Switch_Spead>2</Switch_Spead>
+	<Auto>1</Auto>
 </group>
